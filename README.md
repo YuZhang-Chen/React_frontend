@@ -32,6 +32,7 @@ prettier: 3.5.3 - 一個固執己見的程式碼格式化工具。
 
 ### 專案結構樹狀圖
 
+```text
 .
 ├── README.md               # 專案說明文件 (本檔案)
 ├── package.json            # 專案依賴與腳本設定
@@ -132,3 +133,4 @@ prettier: 3.5.3 - 一個固執己見的程式碼格式化工具。
         ├── axios.js            # Axios 基礎設定
         ├── networkDebugger.js  # 網路請求調試工具
         └── tokenManager.js     # Token 管理工具
+```
