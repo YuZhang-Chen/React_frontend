@@ -8,7 +8,8 @@ import {
 } from 'react-bootstrap';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { createOrder } from '../../services/order/api';
+import { createOrder, getOrderId } from '../../services/order/api';
+import { createOrderDetail } from '../../services/orderDetail/api';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { toast } from 'react-toastify';
@@ -71,21 +72,37 @@ const CartPage = () => {
         setShowCheckoutModal(true);
 
         try {
+            const now = new Date();
+            const formattedDatetime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             const orderData = {
                 mId: user.mId,
-                items: cartItems.map(item => ({
-                    pId: item.pId,
-                    quantity: item.quantity,
-                    price: item.price,
-                    subtotal: item.price * item.quantity
-                })),
+                datetime: formattedDatetime,
                 totalAmount: getTotalAmount(),
-                status: 'pending'
+                status: '等待處理'
             };
-
-            const response = await createOrder(orderData);
+            
+            // 購物車裡的資料
+            const cartData = JSON.parse(localStorage.getItem(`cart_${user.mId}`)) || [];
+           
+            const res = await createOrder(orderData);
+            const response = res.data;
             
             if (response.status === 200) {
+                const mIdData = {
+                    mId: user.mId
+                }
+                let response = await getOrderId(mIdData); //取得訂單ID
+                const oId = response.data.result[0]["oId"];
+                const orderDetails = cartData.map(item => ({
+                    oId,
+                    pId: item.pId,
+                    quantity: item.quantity,
+                    price: item.price
+                }));
+
+                const promises = orderDetails.map(element => createOrderDetail(element));
+                await Promise.all(promises);
+                                
                 clearCart();
                 toast.success('訂單建立成功！');
                 setShowCheckoutModal(false);
@@ -178,7 +195,7 @@ const CartPage = () => {
                                         <CartTable responsive>
                                             <thead>
                                                 <tr>
-                                                    <th>商品</th>
+                                                    <th>商品名稱</th>
                                                     <th>價格</th>
                                                     <th>數量</th>
                                                     <th>小計</th>
@@ -191,11 +208,10 @@ const CartPage = () => {
                                                         <td>
                                                             <ProductInfo>
                                                                 <div className="product-image">
-                                                                    <i className="bi bi-cup-straw"></i>
+                                                                    <img src={item.image_url} style={{ width: "48px", height: "48px", objectFit: "cover", borderRadius: "8px" }} alt="" />
                                                                 </div>
                                                                 <div className="product-details">
-                                                                    <div className="product-name">{item.name}</div>
-                                                                    <div className="product-price">NT$ {item.price}</div>
+                                                                    <div className="product-name">{item.pName}</div>
                                                                 </div>
                                                             </ProductInfo>
                                                         </td>

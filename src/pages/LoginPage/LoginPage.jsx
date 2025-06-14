@@ -1,5 +1,5 @@
 // LoginPage 組件 - 風格登入頁面 (Styled Components版)
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useLayoutEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { login as apiLogin, getUserData } from '../../services/login/api';
@@ -35,6 +35,14 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // 強制滾動到頂部 - 使用 useLayoutEffect 確保在 DOM 渲染前執行
+  useLayoutEffect(() => {
+    // 立即且強制滾動到頂部
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

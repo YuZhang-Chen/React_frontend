@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Modal, Spinner, Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,9 +15,7 @@ import {
   FloatingElement
 } from './OrderHistory.styled';
 import { getOrders } from '../../services/order/api';
-import { getAuthAxios } from '../../utils/authAxios';
-import { handleApiResponse } from '../../utils/tokenManager';
-import Qs from 'qs';
+import { getOrderDetail } from '../../services/orderDetail/api';
 
 const OrderHistory = () => {
   const { user } = useAuth();
@@ -27,6 +25,13 @@ const OrderHistory = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  // 強制滾動到頂部 - 使用 useLayoutEffect 確保在 DOM 渲染前執行
+  useLayoutEffect(() => {
+    // 立即且強制滾動到頂部
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   const statusVariants = {
     '等待處理': 'warning',
@@ -40,9 +45,15 @@ const OrderHistory = () => {
     '製作中': '#17a2b8',
     '可取貨': '#28a745',
     '已完成訂單': '#6c757d'
-  };
-  useEffect(() => {
+  };useEffect(() => {
     fetchUserOrders();
+    // 確保頁面載入時滾動到頂部，並立即執行
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    
+    // 防止其他元素影響滾動位置
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 100);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const fetchUserOrders = async () => {
     try {
@@ -62,15 +73,9 @@ const OrderHistory = () => {
 
   const fetchOrderDetails = async (orderId) => {
     try {
-      setIsLoadingDetail(true);
-      const authAxios = getAuthAxios();
-      if (!authAxios) {
-        throw new Error('未找到認證 token');
-      }
+      setIsLoadingDetail(true);     
+      const response = await getOrderDetail({ oId: orderId });
       
-      const response = await handleApiResponse(
-        authAxios.post('?action=getOrderDetail', Qs.stringify({ oId: orderId }))
-      );
       setOrderDetails(response.data.result);
     } catch (error) {
       console.error('獲取訂單詳情失敗:', error);
@@ -161,7 +166,7 @@ const OrderHistory = () => {
                       <Col md={6} lg={4} key={order.oId} className="mb-4">
                         <OrderCard>
                           <Card.Header className="d-flex justify-content-between align-items-center">
-                            <h6 className="mb-0">訂單 #{order.oId}</h6>
+                            <h6 className="mb-0">訂單 {order.oId}</h6>
                             <StatusBadge 
                               bg={statusVariants[order.status]}
                               statusColor={statusColors[order.status]}

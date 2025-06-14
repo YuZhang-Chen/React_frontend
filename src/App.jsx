@@ -2,7 +2,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
-import Header from './components/layout/Header';
 import PrivateRoute from './components/PrivateRoute';
 import RedirectIfAuthenticated from './components/RedirectIfAuth';
 import TokenExpiredModal from './components/TokenExpiredModal';
@@ -13,7 +12,6 @@ import ManagerPage from './pages/ManagePage/ManagerPage';
 import CartPage from './pages/CartPage/CartPage';
 import OrderHistory from './pages/OrderHistory/OrderHistory';
 import About from './pages/About/About';
-import TestPage from './pages/TestPage/TestPage';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +22,6 @@ function AppContent() {
 
   return (
     <div className="App">
-      <Header />
       <main style={{ minHeight: '80vh' }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -69,10 +66,6 @@ function AppContent() {
             }
           />
           <Route path="/about" element={<About />} />
-          {/* 開發測試頁面 */}
-          {process.env.NODE_ENV === 'development' && (
-            <Route path="/test" element={<TestPage />} />
-          )}
         </Routes>
       </main>
       

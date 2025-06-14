@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
@@ -23,6 +23,14 @@ import {
 } from './About.styled';
 
 export default function About() {
+    // 強制滾動到頂部 - 使用 useLayoutEffect 確保在 DOM 渲染前執行
+    useLayoutEffect(() => {
+        // 立即且強制滾動到頂部
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, []);
+
     return (
         <>
             <Header />

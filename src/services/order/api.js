@@ -30,6 +30,16 @@ const createOrder = async (data) => {
     return handleApiResponse(authAxios.post('?action=newOrder', Qs.stringify(data)));
 };
 
+// 取得新訂單ID
+const getOrderId = async (data) => {
+    const authAxios = getAuthAxios();
+    if (!authAxios) {
+        throw new Error('未找到認證 token');
+    }
+    return handleApiResponse(authAxios.post('?action=getOrderId', Qs.stringify(data)));
+}
+
+
 // 更新訂單
 const updateOrder = (data) => {
     const authAxios = getAuthAxios();
@@ -59,4 +69,4 @@ export const getAllOrders = async () => {
 };
 
 
-export { createOrder, getOrders, getOrder, updateOrder, deleteOrder };
+export { createOrder, getOrders, getOrder, updateOrder, deleteOrder, getOrderId };

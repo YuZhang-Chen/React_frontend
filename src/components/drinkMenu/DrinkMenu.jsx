@@ -141,7 +141,7 @@ const DrinkMenu = () => {
                 <Container>
                     <Row className="text-center py-5">
                         <Col>
-                            <h1 className="display-4 fw-bold text-primary mb-3">Our Products</h1>
+                            <h1 className="display-4 fw-bold text-primary mb-3">我們的產品</h1>
                             <h2 className="h3 text-muted mb-4">飲品介紹</h2>
                             <div className="hero-divider mx-auto"></div>
                         </Col>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Table, Spinner, Alert, Badge, Row, Col } from 'react-bootstrap';
-import { getAuthAxios } from '../../utils/authAxios';
-import { handleApiResponse } from '../../utils/tokenManager';
-import Qs from 'qs';
+import { getOrderDetail } from './api';
 
 const OrderDetailModal = ({ show, onHide, orderId, orderInfo }) => {
   const [orderDetails, setOrderDetails] = useState([]);
@@ -25,14 +23,7 @@ const OrderDetailModal = ({ show, onHide, orderId, orderInfo }) => {
       setIsLoading(true);
       setError('');
       
-      const authAxios = getAuthAxios();
-      if (!authAxios) {
-        throw new Error('未找到認證 token');
-      }
-      
-      const response = await handleApiResponse(
-        authAxios.post('?action=getOrderDetail', Qs.stringify({ oId: orderId }))
-      );     
+      const response = await getOrderDetail({ oId: orderId });
       
       if (response.data) {
         setOrderDetails(response.data.result);

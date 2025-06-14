@@ -42,14 +42,49 @@ const Header = () => {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    const handleLogout = () => {
+    }, []);    const handleLogout = () => {
         logout();
         navigate('/');
+    };    // 處理飲品介紹點擊，滑動到產品區域
+    const handleProductsClick = (e) => {
+        e.preventDefault();
+        
+        // 如果不在首頁，先導航到首頁
+        if (window.location.pathname !== '/') {
+            navigate('/');
+            // 等待頁面加載後再滾動，增加延遲確保 DOM 完全載入
+            setTimeout(() => {
+                scrollToProducts();
+            }, 300);
+        } else {
+            // 如果已在首頁，直接滾動
+            scrollToProducts();
+        }
     };
 
-    const totalItems = isAuthenticated ? getTotalItems() : 0;    return (
+    // 滾動到產品區域
+    const scrollToProducts = () => {
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+            productsSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else {
+            // 如果找不到元素，再嘗試一次（防止 DOM 還沒完全載入）
+            setTimeout(() => {
+                const retrySection = document.getElementById('products');
+                if (retrySection) {
+                    retrySection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 200);
+        }
+    };
+
+    const totalItems = isAuthenticated ? getTotalItems() : 0;return (
         <StyledHeader className={scrolled ? 'scrolled' : ''}>
             {/* Top Info Bar */}
             <TopInfoBar>
@@ -100,12 +135,11 @@ const Header = () => {
                             <StyledNavLink as={Link} to="/">
                                 <i className="bi bi-house-door"></i>
                                 首頁
-                            </StyledNavLink>
-                            <StyledNavLink as={Link} to="/about">
+                            </StyledNavLink>                            <StyledNavLink as={Link} to="/about">
                                 <i className="bi bi-info-circle"></i>
                                 關於我們
                             </StyledNavLink>
-                            <StyledNavLink as={Link} to="/#products">
+                            <StyledNavLink onClick={handleProductsClick} style={{ cursor: 'pointer' }}>
                                 <i className="bi bi-cup-hot"></i>
                                 飲品介紹
                             </StyledNavLink>

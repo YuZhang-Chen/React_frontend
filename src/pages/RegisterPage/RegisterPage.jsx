@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -39,6 +39,14 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // 強制滾動到頂部 - 使用 useLayoutEffect 確保在 DOM 渲染前執行
+  useLayoutEffect(() => {
+    // 立即且強制滾動到頂部
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -70,25 +78,11 @@ const RegisterPage = () => {
       newErrors.name = '姓名為必填';
     }
 
-    // 電話驗證
-    if (!formData.phone.trim()) {
-      newErrors.phone = '電話為必填';
-    } else if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = '請輸入正確的10位數電話號碼';
-    }
-
     // Email驗證
     if (!formData.email.trim()) {
       newErrors.email = 'Email為必填';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = '請輸入正確的Email格式';
-    }
-
-    // 密碼驗證
-    if (!formData.password) {
-      newErrors.password = '密碼為必填';
-    } else if (formData.password.length < 6) {
-      newErrors.password = '密碼至少需要6個字元';
     }
 
     // 確認密碼驗證
@@ -118,10 +112,14 @@ const RegisterPage = () => {
         phone: formData.phone,
         email: formData.email,
         password: formData.password
-      };      await createMember(registerData);
+      };           
+      const res = await createMember(registerData);
+      const response = res.data;
       
-      toast.success('註冊成功！請使用您的帳號登入');
-      navigate('/login');
+      if (response.status === 200) {
+        toast.success('註冊成功！請使用您的帳號登入');
+        navigate('/login');
+      }
     } catch (error) {
       console.error('註冊失敗:', error);
       
@@ -148,11 +146,11 @@ const RegisterPage = () => {
                   <RegisterBrand>
                     <BrandLogo>
                       <BrandIcon>
-                        <i className="fas fa-coffee"></i>
+                        <i className="bi bi-cup-straw"></i>
                       </BrandIcon>
                       <BrandText>
-                        <div className="brand-name">迷客夏</div>
-                        <div className="brand-subtitle">MIXSHOP</div>
+                        <div className="brand-name">章魚燒</div>
+                        <div className="brand-subtitle">Takoyaki</div>
                       </BrandText>
                     </BrandLogo>
                     <BrandDescription>

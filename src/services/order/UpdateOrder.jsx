@@ -103,7 +103,6 @@ export default function UpdateOrder({ show, handleClose, order, onSuccess }) {
                 setError('未找到認證 token，請重新登入');
                 return;
             }
-            console.log(data);
             
             const res = await authAxios.post('?action=updateOrder', Qs.stringify(data));
            

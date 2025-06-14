@@ -1,9 +1,10 @@
 // Home 組件 - 風格首頁 (Styled Components版)
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import DrinkMenu from '../../components/drinkMenu/DrinkMenu';
+import { useLocation } from 'react-router-dom';
 import {
   HomePage,
   MainContent,
@@ -11,8 +12,8 @@ import {
   HeroContent,
   HeroTitle,
   HeroSubtitle,
-  HeroActions,
-  CTAButton,
+  // HeroActions,
+  // CTAButton,
   HeroImage,
   FloatingElements,
   FloatingCup,
@@ -30,6 +31,18 @@ import {
 } from './Home.styled';
 
 export default function Home() {
+  const location = useLocation();
+
+  // 一般情況下滾動到頂部，但要考慮「飲品介紹」連結的特殊需求
+  useLayoutEffect(() => {
+    // 如果沒有特殊的 hash 或 state，則滾動到頂部
+    if (!location.hash && !location.state?.scrollToProducts) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [location]);
+
   return (
     <HomePage>
       <Header />
@@ -51,7 +64,7 @@ export default function Home() {
                     為您帶來最純粹的茶飲體驗。
                     每一口都是對品質的堅持與用心。
                   </HeroSubtitle>
-                  <HeroActions>
+                  {/* <HeroActions>
                     <CTAButton size="lg" className="primary">
                       <i className="bi bi-cup-hot"></i>
                       立即點餐
@@ -60,7 +73,7 @@ export default function Home() {
                       <i className="bi bi-play-circle"></i>
                       品牌故事
                     </CTAButton>
-                  </HeroActions>
+                  </HeroActions> */}
                 </HeroContent>
               </Col>
               <Col lg={6}>

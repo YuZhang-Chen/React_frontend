@@ -1,34 +1,15 @@
 // API 服務：會員相關
 import { getAuthAxios } from "../../utils/authAxios";
-import { handleApiResponse } from "../../utils/tokenManager";
-import { testQsOptions, simulateBackendParsing } from "../../utils/networkDebugger";
+import { handleApiResponse, checkAndSaveToken } from "../../utils/tokenManager";
 import Qs from 'qs';
+import axios from '../../utils/axios';
 
 const createMember = async (data) => {
-    const authAxios = getAuthAxios();
-    if (!authAxios) {
-        throw new Error('未找到認證 token');
-    }
-    
-    console.log('===== CreateMember 除錯資訊 =====');
-    console.log('原始資料:', data);
-    
-    // 測試不同的 Qs.stringify 選項
-    testQsOptions(data);
-    
-    // 使用預設選項
-    const stringifiedData = Qs.stringify(data);
-    console.log('使用的序列化資料:', stringifiedData);
-    
-    // 模擬後端解析
-    simulateBackendParsing(stringifiedData);
-    
-    console.log('請求 URL:', '?action=newMember');
-    console.log('Authorization Header:', localStorage.getItem('jwtToken') ? '已設定' : '未設定');
-    console.log('Content-Type:', 'application/x-www-form-urlencoded');
-    console.log('================================');
-    
-    return handleApiResponse(authAxios.post("?action=newMember", stringifiedData));
+    const response = await axios.post("?action=newMember", Qs.stringify(data),
+            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        );
+    checkAndSaveToken(response);
+    return response;
 }
 
 const getMembers = () => {

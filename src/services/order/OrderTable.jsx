@@ -5,7 +5,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import CreateOrder from './CreateOrder';
 import DeleteOrder from './DeleteOrder';
 import UpdateOrder from './UpdateOrder';
-import OrderDetailModal from './OrderDetailModal';
+import OrderDetailModal from '../orderDetail/OrderDetailModal';
 
 export default function OrderTable() {
     const { user } = useContext(AuthContext);
