@@ -25,6 +25,7 @@ import {
   FloatingElement
 } from './RegisterPage.styled';
 import { createMember } from '../../services/member/api';
+import Header from '../../components/layout/Header';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -136,6 +137,7 @@ const RegisterPage = () => {
   };
   return (
     <RegisterPageContainer>
+      <Header />
       <RegisterMain>
         <RegisterSection>
           <Container>

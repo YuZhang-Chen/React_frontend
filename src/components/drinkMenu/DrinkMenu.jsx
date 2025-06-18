@@ -268,7 +268,7 @@ const DrinkMenu = () => {
                                                         <Button 
                                                             variant="success"
                                                             size="sm"
-                                                            onClick={() => handleOrder(product)}
+                                                            // onClick={() => handleOrder(product)}
                                                         >
                                                             <i className="bi bi-lightning me-2"></i>
                                                             立即下單

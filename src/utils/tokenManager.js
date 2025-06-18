@@ -76,10 +76,11 @@ export const wrapSuccessCallback = (onSuccess) => {
     };
 };
 
-// 默認導出
-export default {
+const tokenManager = {
     checkAndSaveToken,
     handleApiResponse,
     withTokenUpdate,
     wrapSuccessCallback
-};
+}
+
+export default tokenManager;

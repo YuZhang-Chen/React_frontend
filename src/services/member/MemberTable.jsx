@@ -112,7 +112,7 @@ export default function MemberTable() {
                             <td>{member.name}</td>
                             <td>{member.phone}</td>
                             <td>{member.email}</td>
-                            <td>{member.password}</td>
+                            <td>{ member.password[0] + "*".repeat(member.password.length - 1)}</td>
                             <td>
                                 <Button variant="info" size="sm" className="me-2" onClick={() => handleUpdateClick(member)}>
                                     <i className="bi bi-pencil"></i>
@@ -125,7 +125,7 @@ export default function MemberTable() {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="6" className="text-center">無會員資料</td>
+                        <td colSpan="7" className="text-center">無會員資料</td>
                     </tr>
                 )}
             </tbody>
