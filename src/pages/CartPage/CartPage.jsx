@@ -1,5 +1,5 @@
 // CartPage 組件 - 購物車頁面 (Styled Components版)
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Container, 
     Row, 
@@ -45,6 +45,10 @@ const CartPage = () => {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const handleQuantityChange = (pId, newQuantity) => {
         const quantity = parseInt(newQuantity);
         if (quantity >= 1 && quantity <= 99) {
@@ -81,7 +85,7 @@ const CartPage = () => {
                 status: '等待處理'
             };
             
-            // 購物車裡的資料
+            
             const cartData = JSON.parse(localStorage.getItem(`cart_${user.mId}`)) || [];
            
             const res = await createOrder(orderData);

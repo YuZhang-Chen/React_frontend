@@ -41,6 +41,7 @@ export default function ManagerPage() {
     });
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchDashboardData();
     }, []);    
     

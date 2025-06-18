@@ -11,7 +11,8 @@ export default function DeleteMember({ member, show, handleClose, onSuccess }) {
     const handleDelete = async () => {
         if (!member) return;
         
-        try {            setDeleting(true);
+        try {            
+            setDeleting(true);
             setError(null);
             const authAxios = getAuthAxios();
             if (!authAxios) {

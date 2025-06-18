@@ -10,7 +10,7 @@ React與MVC架構撰寫的PHP+MySQL
 
 ### 主要套件說明
 以下是本專案使用的一些主要套件：
-
+```bash
 Production Dependencies:
 @testing-library/dom: ^10.4.0 - 用於測試 DOM 節點的實用工具。
 @testing-library/jest-dom: ^6.6.3 - 提供 Jest 使用的自訂 DOM 匹配器。
@@ -29,6 +29,7 @@ styled-components: ^6.1.18 - 允許您在 JavaScript 中編寫實際 CSS 來設�
 web-vitals: ^2.1.4 - 用於測量網頁核心效能指標的 Google 提案。
 Development Dependencies:
 prettier: 3.5.3 - 一個固執己見的程式碼格式化工具。
+```
 
 ### 專案結構樹狀圖
 
