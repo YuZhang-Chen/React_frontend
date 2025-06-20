@@ -1,4 +1,4 @@
-﻿// Home.styled.jsx - 餈瑕恥憭◢?嚙踝蕭???Styled Components
+// Home.styled.jsx - 餈瑕恥憭◢?嚙踝蕭???Styled Components
 import styled, { keyframes } from 'styled-components';
 import { Button, Card } from 'react-bootstrap';
 import { theme } from '../../styles/theme';
